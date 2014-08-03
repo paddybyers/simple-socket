@@ -44,6 +44,11 @@ Socket.prototype.connect = function(callback) {
   self.debug && self.debug('setting no delay to' + self.options.noDelay);
   self.socket.setNoDelay(self.options.noDelay);
 
+  // set fallback error handler, to prevent uncaught errors
+  self.socket.on('error', function(err) {
+    self.debug && self.debug('unhandled error: ' + err);
+  });
+
   // event handlers
   self.handleCallback(connectEvent, function(err) {
     if (err) { 
